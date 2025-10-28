@@ -3,7 +3,7 @@ Extract 3D model points from a Blender frame.
 
 This takes one frame's depth map and mask, converts it to a point cloud,
 and transforms it to the object's local coordinate frame (removes the pose).
-The result is the canonical 3D model that DenseFusion needs.
+The result is the canonical 3D model that DenseFusion needs. It is used as a default pose model while training (the predicted rotation and translation is applied to this pose to get the observed one).
 """
 
 import numpy as np
@@ -137,15 +137,11 @@ def save_model_points(points, output_path):
 
 
 if __name__ == '__main__':
-    # Configuration
     root_dir = "/Users/filipsulich/Library/CloudStorage/GoogleDrive-sulich.f@gmail.com/My Drive/Project3-1/DenseFusion_Blender_data"
     output_path = os.path.join(root_dir, "model_points.xyz")
 
-    # Extract model from frame 0 (change if needed)
-    # Pick a frame where the object is clearly visible and well-centered
     model_points = extract_model_points(root_dir, frame_idx=0, num_points=1000)
-
-    # Save to file
     save_model_points(model_points, output_path)
+    
+    print("done - model points saved")
 
-    print("\nDone! You can now use this model_points.xyz file with the dataset.")
